@@ -47,32 +47,55 @@ switch_interrupt_handler()
 }
 
 
-// axis zero for col, axis 1 for row
+// axis zero for col, axis 1 for rzypper updateow
 
 short drawPos[2] = {1,10}, controlPos[2] = {2, 10};
 short colVelocity = 1, colLimits[2] = {1, screenWidth/2};
 
-void
-draw_ball(int col, int row, unsigned short color)
+short drawPosSec[2] = {20,100};
+short control[2] = {21,100};
+
+short colVeSecond = 2;
+short colera[2] = {1, screenWidth-20};
+
+int sizeOfBall = 10;
+
+void draw_ball(int col, int row, unsigned short color)
 {
-  fillRectangle(col-1, row-1, 3, 3, color);
+  fillRectangle(col-1, row-1, sizeOfBall, sizeOfBall, color);
 }
 
 
-void
-screen_update_ball()
+void screen_update_ball()
 {
   for (char axis = 0; axis < 2; axis ++) 
     if (drawPos[axis] != controlPos[axis]) /* position changed? */
       goto redraw;
   return;			/* nothing to do */
  redraw:
+  sizeOfBall++;
   draw_ball(drawPos[0], drawPos[1], COLOR_BLUE); /* erase */
+  sizeOfBall--;
   for (char axis = 0; axis < 2; axis ++) 
     drawPos[axis] = controlPos[axis];
   draw_ball(drawPos[0], drawPos[1], COLOR_WHITE); /* draw */
 }
-  
+
+void screen_update_second_ball(){
+  for (char axis = 0; axis < 2; axis ++){
+    if (drawPosSec[axis] != control[axis]){
+        sizeOfBall++;
+	draw_ball(drawPosSec[0], drawPosSec[1], COLOR_BLUE);
+	sizeOfBall--;
+	for(char sixa = 0; sixa < 2; sixa++){
+	  drawPosSec[sixa] = control[sixa];
+	}
+	draw_ball(drawPosSec[0], drawPosSec[1], COLOR_WHITE);
+    }
+  }
+  return;
+}
+
 
 short redrawScreen = 1;
 u_int controlFontColor = COLOR_GREEN;
@@ -82,15 +105,30 @@ void wdt_c_handler()
   static int secCount = 0;
 
   secCount ++;
-  if (secCount >= 25) {		/* 10/sec */
+  if (secCount >= 12) {		/* 10/sec */
    
     {				/* move ball */
       short oldCol = controlPos[0];
       short newCol = oldCol + colVelocity;
+      //sizeOfBall++;
+      if (sizeOfBall > 20){
+	sizeOfBall--;
+      }
+      else{
+	sizeOfBall++;
+      }
       if (newCol <= colLimits[0] || newCol >= colLimits[1])
 	colVelocity = -colVelocity;
       else
 	controlPos[0] = newCol;
+      short oldColon = control[0];
+      short newColon = oldColon + colVeSecond;
+      if (newColon <= colera[0] || newColon >= colera[1]){
+	colVeSecond = -colVeSecond;
+      }
+      else{
+	control[0] = newColon;
+      }
     }
 
     {				/* update hourglass */
@@ -164,7 +202,9 @@ void
 update_shape()
 {
   screen_update_ball();
-  screen_update_hourglass();
+
+  screen_update_second_ball();
+  //screen_update_hourglass();
 }
    
 
