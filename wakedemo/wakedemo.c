@@ -86,19 +86,28 @@ void screen_update_ball()
   draw_ball(drawPos[0], drawPos[1], COLOR_WHITE); /* draw */
 }
 
+
+//NEW STUFF BE CAREFUL
 void screen_update_second_ball(){
-  for (char axis = 0; axis < 2; axis ++){
-    if (drawPosSec[axis] != control[axis]){
-        sizeOfBall++;
-	draw_ball(drawPosSec[0], drawPosSec[1], COLOR_BLUE);
-	sizeOfBall--;
-	for(char sixa = 0; sixa < 2; sixa++){
-	  drawPosSec[sixa] = control[sixa];
-	}
-	draw_ball(drawPosSec[0], drawPosSec[1], COLOR_OF_BALL);
-    }
-  }
-  return;
+  char position_changed = (drawPosSec[0] != control[0]) |
+                            (drawPosSec[1] != control[1]);
+
+  // Increment size only if position changed
+  sizeOfBall += position_changed;
+
+  // Draw first ball if position changed
+  draw_ball(drawPosSec[0], drawPosSec[1],
+            position_changed ? COLOR_BLUE : COLOR_OF_BALL);
+
+  // Update positions unconditionally
+  drawPosSec[0] = control[0];
+  drawPosSec[1] = control[1];
+
+  // Draw final ball
+  draw_ball(drawPosSec[0], drawPosSec[1], COLOR_OF_BALL);
+
+  // Decrement size if it was incremented
+  sizeOfBall -= position_changed;
 }
 
 short redrawScreen = 1;
