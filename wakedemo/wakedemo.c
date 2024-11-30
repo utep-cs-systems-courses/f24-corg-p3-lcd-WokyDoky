@@ -172,29 +172,29 @@ void main()
   }
 }
 
-void
-screen_update_hourglass()
-{
-  static unsigned char row = screenHeight / 2, col = screenWidth / 2;
-  static char lastStep = 0;
-  
-  if (step == 0 || (lastStep > step)) {
-    clearScreen(COLOR_BLUE);
-    lastStep = 0;
-  } else {
-    for (; lastStep <= step; lastStep++) {
-      int startCol = col - lastStep;
-      int endCol = col + lastStep;
-      int width = 1 + endCol - startCol;
-      
-      // a color in this BGR encoding is BBBB BGGG GGGR RRRR
-      unsigned int color = (blue << 11) | (green << 5) | red;
-      
-      fillRectangle(startCol, row+lastStep, width, 1, color);
-      fillRectangle(startCol, row-lastStep, width, 1, color);
-    }
-  }
-}  
+//void
+//screen_update_hourglass()
+//{
+//  static unsigned char row = screenHeight / 2, col = screenWidth / 2;
+//  static char lastStep = 0;
+//
+//  if (step == 0 || (lastStep > step)) {
+//    clearScreen(COLOR_BLUE);
+//    lastStep = 0;
+//  } else {
+//    for (; lastStep <= step; lastStep++) {
+//      int startCol = col - lastStep;
+//      int endCol = col + lastStep;
+//      int width = 1 + endCol - startCol;
+//
+//      // a color in this BGR encoding is BBBB BGGG GGGR RRRR
+//      unsigned int color = (blue << 11) | (green << 5) | red;
+//
+//      fillRectangle(startCol, row+lastStep, width, 1, color);
+//      fillRectangle(startCol, row-lastStep, width, 1, color);
+//    }
+//  }
+//}
 
 
     
