@@ -20,6 +20,10 @@
 #define PADDLE_HEIGHT 10
 #define PADDLE_SPEED 5
 
+// Screen dimensions
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 160
+
 // Global variables for paddle
 short paddleX = (SCREEN_WIDTH - PADDLE_WIDTH) / 2;  // Start at center
 short paddleY = 10;  // Paddle positioned near the top of the screen
@@ -61,9 +65,7 @@ switch_interrupt_handler()
   switches = ~p2val & SWITCHES;
 }
 
-// Screen dimensions
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 160
+
 
 // axis zero for col, axis 1 for row
 
