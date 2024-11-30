@@ -182,9 +182,8 @@ void wdt_c_handler()
         colorFromWheel++;
       }
       if (is_ball_colliding_with_paddle(newCol, newRow, sizeOfBall)) {
-        colVelocity = -colVelocity;
+
         rowVelocity = -rowVelocity;
-        newRow = paddleY - sizeOfBall; // Adjust position to avoid overlapping
       }
 
       // Screen boundary checks
