@@ -78,17 +78,19 @@ void draw_ball(int col, int row, unsigned short color, int sizeOfBall)
 
 void screen_update_ball()
 {
-  for (char axis = 0; axis < 2; axis ++)
-    if (drawPos[axis] != controlPos[axis]) /* position changed? */
-      goto redraw;
-  return;			/* nothing to do */
- redraw:
-  sizeOfBall++;
-  draw_ball(drawPos[0], drawPos[1], COLOR_BLUE, sizeOfBall); /* erase */
-  sizeOfBall--;
-  for (char axis = 0; axis < 2; axis ++)
-    drawPos[axis] = controlPos[axis];
-  draw_ball(drawPos[0], drawPos[1], COLOR_WHITE, sizeOfBall); /* draw */
+  int position_changed = (drawPos[0] != controlPos[0]) | (drawPos[1] != controlPos[1]);
+
+  // Erase the old ball if position changed
+  sizeOfBall += position_changed;
+  draw_ball(drawPos[0], drawPos[1], position_changed ? COLOR_BLUE : COLOR_WHITE, sizeOfBall);
+  sizeOfBall -= position_changed;
+
+  // Update drawPos to match controlPos (always happens)
+  drawPos[0] = controlPos[0];
+  drawPos[1] = controlPos[1];
+
+  // Draw the new ball
+  draw_ball(drawPos[0], drawPos[1], COLOR_WHITE, sizeOfBall);
 }
 
 void screen_update_second_ball(){
