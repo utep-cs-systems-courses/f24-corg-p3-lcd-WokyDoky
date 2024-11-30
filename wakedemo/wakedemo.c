@@ -19,6 +19,8 @@
 char blue = 31, green = 0, red = 31;
 unsigned char step = 0;
 
+
+
 static char 
 switch_update_interrupt_sense()
 {
@@ -85,6 +87,7 @@ void screen_update_ball()
   draw_ball(drawPos[0], drawPos[1], COLOR_WHITE); /* draw */
 }
 
+int COLOR_OF_BALL = COLOR_WHITE;
 void screen_update_second_ball(){
   for (char axis = 0; axis < 2; axis ++){
     if (drawPosSec[axis] != control[axis]){
@@ -163,16 +166,12 @@ void wdt_c_handler()
         control[1] = newRowSec;
     }
 
-    { /* Update color (optional) */
-      if (switches & SW3) green = (green + 1) % 64;
-      if (switches & SW2) blue = (blue + 2) % 32;
-      if (switches & SW1) red = (red - 3) % 32;
-      if (step <= 30)
-        step ++;
-      else
-        step = 0;
-      secCount = 0;
-    }
+    if (switches & SW1){
+      if (COLOR_OF_BALL == COLOR_WHITE){
+        COLOR_OF_BALL = COLOR_YELLOW;
+        } else {
+          COLOR_OF_BALL = COLOR_WHITE;
+        }
     if (switches & SW4) return;
     redrawScreen = 1;
   }
