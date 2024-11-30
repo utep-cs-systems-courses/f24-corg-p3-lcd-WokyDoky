@@ -215,7 +215,7 @@ void wdt_c_handler()
       else
         control[1] = newRowSec;
     }
-    if (is_ball_colliding_with_paddle(newCol, newRow, sizeOfBall)) {
+    if (is_ball_colliding_with_paddle(newColon, newRowSec, sizeOfBallSec)) {
 
       rowVeSecond = -rowVeSecond;
     }
