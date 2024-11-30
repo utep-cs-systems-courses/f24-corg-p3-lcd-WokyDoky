@@ -97,12 +97,12 @@ void screen_update_second_ball(){
 
   // Increment size only if position changed
   sizeOfBall += position_changed;
-  draw_ball(drawPosSec[0], drawPosSec[1], position_changed ? COLOR_BLUE : COLOR_OF_BALL);
+  draw_ball(drawPosSec[0], drawPosSec[1], position_changed ? COLOR_BLUE : colorWheel[colorFromWheel]);
 
   drawPosSec[0] = control[0];
   drawPosSec[1] = control[1];
 
-  draw_ball(drawPosSec[0], drawPosSec[1], COLOR_OF_BALL);
+  draw_ball(drawPosSec[0], drawPosSec[1], colorWheel[colorFromWheel]);
 
   sizeOfBall -= position_changed;
 }
