@@ -16,6 +16,14 @@
 
 #define SWITCHES 15
 
+#define PADDLE_WIDTH 30
+#define PADDLE_HEIGHT 10
+#define PADDLE_SPEED 5
+
+// Global variables for paddle
+short paddleX = (SCREEN_WIDTH - PADDLE_WIDTH) / 2;  // Start at center
+short paddleY = 10;  // Paddle positioned near the top of the screen
+
 
 //Added wheel
 int colorWheel [] = {COLOR_RED, COLOR_GREEN, COLOR_BLACK};
@@ -70,7 +78,6 @@ short colera[2] = {1, SCREEN_WIDTH-20};
 
 int sizeOfBall = 10;
 int sizeOfBallSec = 10;
-int sizeOfPaddel = 20;
 
 void draw_ball(int col, int row, unsigned short color, int sizeOfBall)
 {
@@ -102,24 +109,25 @@ void screen_update_second_ball(){
   sizeOfBallSec -= position_changed;
 }
 
-short padelPos[2] = {1,10}, controlPadelPos[2] = {2, 10};
-short padelVelocity = 1;
-
-
-void padel (int col, int row, unsigned short color){
-  fillRectangle(col-1, row-1, sizeOfPaddel, sizeOfPaddel / 2, color);
+void draw_paddle(int x, int y, unsigned short color) {
+  fillRectangle(x, y, PADDLE_WIDTH, PADDLE_HEIGHT, color);
 }
-void screen_update_padel(){
-  for (char axis = 0; axis < 2; axis ++)
-    if (padelPos[axis] != controlPadelPos[axis]) /* position changed? */
-      goto redraw;
-  return;			/* nothing to do */
-  redraw:
-   padel(padelPos[0], padelPos[1], COLOR_BLUE); /* erase */
-  for (char axis = 0; axis < 2; axis ++)
-    padelPos[axis] = controlPadelPos[axis];
-  padel(padelPos[0], padelPos[1], COLOR_WHITE); /* draw */
+
+// Function to update paddle position
+void update_paddle_position() {
+  // Move paddle based on button presses
+  if (switches & SW1) {  // Move right
+    if (paddleX + PADDLE_WIDTH < SCREEN_WIDTH) {
+      paddleX += PADDLE_SPEED;
+    }
+  }
+  if (switches & SW2) {  // Move left
+    if (paddleX > 0) {
+      paddleX -= PADDLE_SPEED;
+    }
+  }
 }
+
 
 short redrawScreen = 1;
 u_int controlFontColor = COLOR_GREEN;
@@ -133,7 +141,7 @@ void wdt_c_handler()
   static int secCount = 0;
 
   secCount ++;
-  if (secCount >= 12) { /* 10/sec */
+  if (secCount >= 12) {
 
     { /* Move first ball */
       short oldCol = controlPos[0];
@@ -232,7 +240,7 @@ void main()
 void update_shape() {
   screen_update_ball();
   screen_update_second_ball();
-  screen_update_padel();
+  update_paddle_position();
 }
 
 void
