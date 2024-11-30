@@ -1,5 +1,3 @@
-//NEW STUFF Debug text
-
 #include <msp430.h>
 #include <libTimer.h>
 #include "lcdutils.h"
@@ -16,7 +14,12 @@
 
 #define SWITCHES 15
 
-char blue = 31, green = 0, red = 31;
+// Color arrays for ball color cycling
+unsigned short colorCycle1[] = {COLOR_WHITE, COLOR_RED, COLOR_GREEN, COLOR_BLUE, COLOR_YELLOW};
+unsigned short colorCycle2[] = {COLOR_WHITE, COLOR_MAGENTA, COLOR_CYAN, COLOR_ORANGE, COLOR_PURPLE};
+int colorIndex1 = 0;
+int colorIndex2 = 0;
+
 unsigned char step = 0;
 
 static char 
@@ -46,6 +49,17 @@ switch_interrupt_handler()
 {
   char p2val = switch_update_interrupt_sense();
   switches = ~p2val & SWITCHES;
+  
+  // Color change logic for buttons
+  if (switches & SW1) {
+    // Cycle color for first ball
+    colorIndex1 = (colorIndex1 + 1) % (sizeof(colorCycle1) / sizeof(colorCycle1[0]));
+  }
+  
+  if (switches & SW2) {
+    // Cycle color for second ball
+    colorIndex2 = (colorIndex2 + 1) % (sizeof(colorCycle2) / sizeof(colorCycle2[0]));
+  }
 }
 
 // Screen dimensions
@@ -53,7 +67,6 @@ switch_interrupt_handler()
 #define SCREEN_HEIGHT 160
 
 // axis zero for col, axis 1 for row
-
 short drawPos[2] = {1,10}, controlPos[2] = {2, 10};
 short colVelocity = 3, colLimits[2] = {1, SCREEN_WIDTH-20};
 
@@ -72,7 +85,7 @@ void draw_ball(int col, int row, unsigned short color)
 
 void screen_update_ball()
 {
-  for (char axis = 0; axis < 2; axis ++)
+  for (char axis = 0; axis < 2; axis ++) 
     if (drawPos[axis] != controlPos[axis]) /* position changed? */
       goto redraw;
   return;			/* nothing to do */
@@ -80,21 +93,21 @@ void screen_update_ball()
   sizeOfBall++;
   draw_ball(drawPos[0], drawPos[1], COLOR_BLUE); /* erase */
   sizeOfBall--;
-  for (char axis = 0; axis < 2; axis ++)
+  for (char axis = 0; axis < 2; axis ++) 
     drawPos[axis] = controlPos[axis];
-  draw_ball(drawPos[0], drawPos[1], COLOR_WHITE); /* draw */
+  draw_ball(drawPos[0], drawPos[1], colorCycle1[colorIndex1]); /* draw with current color */
 }
 
 void screen_update_second_ball(){
   for (char axis = 0; axis < 2; axis ++){
     if (drawPosSec[axis] != control[axis]){
         sizeOfBall++;
-	draw_ball(drawPosSec[0], drawPosSec[1], COLOR_BLUE);
+	draw_ball(drawPosSec[0], drawPosSec[1], COLOR_BLUE); /* erase */
 	sizeOfBall--;
 	for(char sixa = 0; sixa < 2; sixa++){
 	  drawPosSec[sixa] = control[sixa];
 	}
-	draw_ball(drawPosSec[0], drawPosSec[1], COLOR_WHITE);
+	draw_ball(drawPosSec[0], drawPosSec[1], colorCycle2[colorIndex2]); /* draw with current color */
     }
   }
   return;
@@ -121,7 +134,7 @@ void wdt_c_handler()
       short newRow = oldRow + rowVelocity;
 
       // Check collision between balls
-      int ballDistance = ((newCol - control[0]) * (newCol - control[0])) +
+      int ballDistance = ((newCol - control[0]) * (newCol - control[0])) + 
                          ((newRow - control[1]) * (newRow - control[1]));
       int collisionThreshold = (sizeOfBall * 2) * (sizeOfBall * 2);
 
@@ -163,21 +176,27 @@ void wdt_c_handler()
         control[1] = newRowSec;
     }
 
-    { /* Update color (optional) */
-      if (switches & SW3) green = (green + 1) % 64;
-      if (switches & SW2) blue = (blue + 2) % 32;
-      if (switches & SW1) red = (red - 3) % 32;
+    { /* Optional: Switch-based color cycling for third color control */
+      if (switches & SW3) {
+        // Example: cycle global color palette
+        blue = (blue + 1) % 32;
+      }
+      if (switches & SW4) {
+        // Example: cycle global color palette
+        red = (red + 1) % 32;
+      }
+      
       if (step <= 30)
         step ++;
       else
         step = 0;
       secCount = 0;
     }
-    if (switches & SW4) return;
+    
     redrawScreen = 1;
   }
 }
-
+  
 void update_shape();
 
 void main()
@@ -187,10 +206,10 @@ void main()
   configureClocks();
   lcd_init();
   switch_init();
-
+  
   enableWDTInterrupts();      /**< enable periodic interrupt */
   or_sr(0x8);	              /**< GIE (enable interrupts) */
-
+  
   clearScreen(COLOR_BLUE);
   while (1) {			/* forever */
     if (redrawScreen) {
@@ -202,14 +221,14 @@ void main()
     P1OUT |= LED;	/* led on */
   }
 }
-
+   
 void
 update_shape()
 {
   screen_update_ball();
   screen_update_second_ball();
 }
-
+   
 void
 __interrupt_vec(PORT2_VECTOR) Port_2(){
   if (P2IFG & SWITCHES) {	      /* did a button cause this interrupt? */
