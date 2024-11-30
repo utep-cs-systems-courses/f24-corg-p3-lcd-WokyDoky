@@ -95,50 +95,66 @@ void screen_update_second_ball(){
   }
   return;
 }
-
+/*
+New section
+ */
 
 short redrawScreen = 1;
 u_int controlFontColor = COLOR_GREEN;
+
+short rowVelocity = 1, rowLimits[2] = {1, screenHeight/2};
+short rowVeSecond = 2;
+short rowera[2] = {1, screenHeight-20};
 
 void wdt_c_handler()
 {
   static int secCount = 0;
 
   secCount ++;
-  if (secCount >= 12) {		/* 10/sec */
-   
-    {				/* move ball */
+  if (secCount >= 12) { /* 10/sec */
+
+    { /* Move first ball */
       short oldCol = controlPos[0];
       short newCol = oldCol + colVelocity;
-      //sizeOfBall++;
-      if (sizeOfBall > 20){
-	sizeOfBall--;
-      }
-      else{
-	sizeOfBall++;
-      }
+      short oldRow = controlPos[1];
+      short newRow = oldRow + rowVelocity;
+
       if (newCol <= colLimits[0] || newCol >= colLimits[1])
-	colVelocity = -colVelocity;
+        colVelocity = -colVelocity;
       else
-	controlPos[0] = newCol;
-      short oldColon = control[0];
-      short newColon = oldColon + colVeSecond;
-      if (newColon <= colera[0] || newColon >= colera[1]){
-	colVeSecond = -colVeSecond;
-      }
-      else{
-	control[0] = newColon;
-      }
+        controlPos[0] = newCol;
+
+      if (newRow <= rowLimits[0] || newRow >= rowLimits[1])
+        rowVelocity = -rowVelocity;
+      else
+        controlPos[1] = newRow;
     }
 
-    {				/* update hourglass */
+    { /* Move second ball */
+      short oldColon = control[0];
+      short newColon = oldColon + colVeSecond;
+      short oldRowSec = control[1];
+      short newRowSec = oldRowSec + rowVeSecond;
+
+      if (newColon <= colera[0] || newColon >= colera[1])
+        colVeSecond = -colVeSecond;
+      else
+        control[0] = newColon;
+
+      if (newRowSec <= rowera[0] || newRowSec >= rowera[1])
+        rowVeSecond = -rowVeSecond;
+      else
+        control[1] = newRowSec;
+    }
+
+    { /* Update hourglass (if needed) */
       if (switches & SW3) green = (green + 1) % 64;
       if (switches & SW2) blue = (blue + 2) % 32;
       if (switches & SW1) red = (red - 3) % 32;
       if (step <= 30)
-	step ++;
+        step ++;
       else
-	step = 0;
+        step = 0;
       secCount = 0;
     }
     if (switches & SW4) return;
@@ -172,29 +188,7 @@ void main()
   }
 }
 
-//void
-//screen_update_hourglass()
-//{
-//  static unsigned char row = screenHeight / 2, col = screenWidth / 2;
-//  static char lastStep = 0;
-//
-//  if (step == 0 || (lastStep > step)) {
-//    clearScreen(COLOR_BLUE);
-//    lastStep = 0;
-//  } else {
-//    for (; lastStep <= step; lastStep++) {
-//      int startCol = col - lastStep;
-//      int endCol = col + lastStep;
-//      int width = 1 + endCol - startCol;
-//
-//      // a color in this BGR encoding is BBBB BGGG GGGR RRRR
-//      unsigned int color = (blue << 11) | (green << 5) | red;
-//
-//      fillRectangle(startCol, row+lastStep, width, 1, color);
-//      fillRectangle(startCol, row-lastStep, width, 1, color);
-//    }
-//  }
-//}
+
 
 
     
