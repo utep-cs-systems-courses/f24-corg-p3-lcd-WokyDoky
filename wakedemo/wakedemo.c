@@ -135,11 +135,6 @@ void wdt_c_handler()
         rowVeSecond = -rowVeSecond;
         if (colorFromWheel >= *(&colorWheel + 1) - colorWheel) colorFromWheel = 0;
         colorFromWheel++;
-
-        if (sizeOfBallSec > 40) sizeOfBallSec = 10;
-        sizeOfBallSec += 1;
-
-
       }
 
       // Screen boundary checks
