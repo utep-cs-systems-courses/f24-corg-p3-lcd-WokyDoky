@@ -18,7 +18,7 @@
 
 
 //Added wheel
-int colorWheel [] = {COLOR_WHITE, COLOR_CYAN, COLOR_MAGENTA, COLOR_HOT_PINK, COLOR_PINK};
+int colorWheel [] = {COLOR_DARK_OLIVE_GREEN, COLOR_CYAN, COLOR_BLACK};
 int colorFromWheel = 0;
 int COLOR_OF_BALL = COLOR_WHITE;
 char blue = 31, green = 0, red = 31;
@@ -140,10 +140,8 @@ void wdt_c_handler()
         if (colorFromWheel >= *(&colorWheel + 1) - colorWheel) colorFromWheel = 0;
         colorFromWheel++;
 
-        sizeOfBallSec++;
-        if (sizeOfBallSec > 20) {
-          sizeOfBallSec = 10; // Reset size if it exceeds 20
-        }
+        sizeOfBallSec = (sizeOfBallSec - 10) % 11 + 10;
+
       }
 
       // Screen boundary checks
