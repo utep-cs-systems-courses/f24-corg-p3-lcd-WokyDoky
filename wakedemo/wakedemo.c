@@ -1,3 +1,5 @@
+//NEW STUFF Debug text
+
 #include <msp430.h>
 #include <libTimer.h>
 #include "lcdutils.h"
@@ -46,17 +48,20 @@ switch_interrupt_handler()
   switches = ~p2val & SWITCHES;
 }
 
+// Screen dimensions
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 160
 
-// axis zero for col, axis 1 for rzypper updateow
+// axis zero for col, axis 1 for row
 
 short drawPos[2] = {1,10}, controlPos[2] = {2, 10};
-short colVelocity = 1, colLimits[2] = {1, screenWidth/2};
+short colVelocity = 3, colLimits[2] = {1, SCREEN_WIDTH-20};
 
 short drawPosSec[2] = {20,100};
 short control[2] = {21,100};
 
-short colVeSecond = 2;
-short colera[2] = {1, screenWidth-20};
+short colVeSecond = -3;
+short colera[2] = {1, SCREEN_WIDTH-20};
 
 int sizeOfBall = 10;
 
@@ -65,10 +70,9 @@ void draw_ball(int col, int row, unsigned short color)
   fillRectangle(col-1, row-1, sizeOfBall, sizeOfBall, color);
 }
 
-
 void screen_update_ball()
 {
-  for (char axis = 0; axis < 2; axis ++) 
+  for (char axis = 0; axis < 2; axis ++)
     if (drawPos[axis] != controlPos[axis]) /* position changed? */
       goto redraw;
   return;			/* nothing to do */
@@ -76,7 +80,7 @@ void screen_update_ball()
   sizeOfBall++;
   draw_ball(drawPos[0], drawPos[1], COLOR_BLUE); /* erase */
   sizeOfBall--;
-  for (char axis = 0; axis < 2; axis ++) 
+  for (char axis = 0; axis < 2; axis ++)
     drawPos[axis] = controlPos[axis];
   draw_ball(drawPos[0], drawPos[1], COLOR_WHITE); /* draw */
 }
@@ -95,16 +99,13 @@ void screen_update_second_ball(){
   }
   return;
 }
-/*
-New section
- */
 
 short redrawScreen = 1;
 u_int controlFontColor = COLOR_GREEN;
 
-short rowVelocity = 1, rowLimits[2] = {1, screenHeight/2};
-short rowVeSecond = 2;
-short rowera[2] = {1, screenHeight-20};
+short rowVelocity = 3, rowLimits[2] = {1, SCREEN_HEIGHT-20};
+short rowVeSecond = -3;
+short rowera[2] = {1, SCREEN_HEIGHT-20};
 
 void wdt_c_handler()
 {
@@ -119,6 +120,20 @@ void wdt_c_handler()
       short oldRow = controlPos[1];
       short newRow = oldRow + rowVelocity;
 
+      // Check collision between balls
+      int ballDistance = ((newCol - control[0]) * (newCol - control[0])) +
+                         ((newRow - control[1]) * (newRow - control[1]));
+      int collisionThreshold = (sizeOfBall * 2) * (sizeOfBall * 2);
+
+      if (ballDistance <= collisionThreshold) {
+        // Swap velocities on collision
+        colVelocity = -colVelocity;
+        rowVelocity = -rowVelocity;
+        colVeSecond = -colVeSecond;
+        rowVeSecond = -rowVeSecond;
+      }
+
+      // Screen boundary checks
       if (newCol <= colLimits[0] || newCol >= colLimits[1])
         colVelocity = -colVelocity;
       else
@@ -136,6 +151,7 @@ void wdt_c_handler()
       short oldRowSec = control[1];
       short newRowSec = oldRowSec + rowVeSecond;
 
+      // Screen boundary checks
       if (newColon <= colera[0] || newColon >= colera[1])
         colVeSecond = -colVeSecond;
       else
@@ -147,7 +163,7 @@ void wdt_c_handler()
         control[1] = newRowSec;
     }
 
-    { /* Update hourglass (if needed) */
+    { /* Update color (optional) */
       if (switches & SW3) green = (green + 1) % 64;
       if (switches & SW2) blue = (blue + 2) % 32;
       if (switches & SW1) red = (red - 3) % 32;
@@ -161,21 +177,20 @@ void wdt_c_handler()
     redrawScreen = 1;
   }
 }
-  
+
 void update_shape();
 
 void main()
 {
-  
   P1DIR |= LED;		/**< Green led on when CPU on */
   P1OUT |= LED;
   configureClocks();
   lcd_init();
   switch_init();
-  
+
   enableWDTInterrupts();      /**< enable periodic interrupt */
   or_sr(0x8);	              /**< GIE (enable interrupts) */
-  
+
   clearScreen(COLOR_BLUE);
   while (1) {			/* forever */
     if (redrawScreen) {
@@ -188,20 +203,12 @@ void main()
   }
 }
 
-
-
-
-    
 void
 update_shape()
 {
   screen_update_ball();
-
   screen_update_second_ball();
-  //screen_update_hourglass();
 }
-   
-
 
 void
 __interrupt_vec(PORT2_VECTOR) Port_2(){
