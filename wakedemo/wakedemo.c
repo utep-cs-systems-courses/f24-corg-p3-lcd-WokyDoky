@@ -143,35 +143,35 @@ short rowVelocity = 3, rowLimits[2] = {1, SCREEN_HEIGHT-20};
 short rowVeSecond = -3;
 short rowera[2] = {1, SCREEN_HEIGHT-20};
 
-void wdt_c_handler()
-{
+
+//Absolute big change:
+
+int is_ball_colliding_with_paddle(short ballX, short ballY, int ballSize) {
+  // Check if the ball intersects the paddle's rectangle
+  return (ballY + ballSize >= paddleY &&       // Ball is at or below paddle's top edge
+          ballY <= paddleY + PADDLE_HEIGHT && // Ball is above paddle's bottom edge
+          ballX + ballSize >= paddleX &&      // Ball is at or beyond paddle's left edge
+          ballX <= paddleX + PADDLE_WIDTH);   // Ball is at or before paddle's right edge
+}
+
+void wdt_c_handler() {
   static int secCount = 0;
 
-  secCount ++;
+  secCount++;
   if (secCount >= 12) {
-
-    { /* Move first ball */
+    { /* Move the first ball */
       short oldCol = controlPos[0];
       short newCol = oldCol + colVelocity;
       short oldRow = controlPos[1];
       short newRow = oldRow + rowVelocity;
 
-      // Check collision between balls
-      int ballDistance = ((newCol - control[0]) * (newCol - control[0])) +
-                         ((newRow - control[1]) * (newRow - control[1]));
-      int collisionThreshold = (sizeOfBall * 2) * (sizeOfBallSec * 2);
-
-      if (ballDistance <= collisionThreshold) {
-        // Swap velocities on collision
-        colVelocity = -colVelocity;
-        rowVelocity = -rowVelocity;
-        colVeSecond = -colVeSecond;
-        rowVeSecond = -rowVeSecond;
-        if (colorFromWheel >= *(&colorWheel + 1) - colorWheel) colorFromWheel = 0;
-        colorFromWheel++;
+      // Check collision with paddle
+      if (is_ball_colliding_with_paddle(newCol, newRow, sizeOfBall)) {
+        rowVelocity = -rowVelocity; // Reverse vertical direction
+        newRow = paddleY - sizeOfBall; // Adjust position to avoid overlapping
       }
 
-      // Screen boundary checks
+      // Check screen boundaries
       if (newCol <= colLimits[0] || newCol >= colLimits[1])
         colVelocity = -colVelocity;
       else
@@ -183,13 +183,13 @@ void wdt_c_handler()
         controlPos[1] = newRow;
     }
 
-    { /* Move second ball */
+    { /* Move the second ball (if applicable) */
       short oldColon = control[0];
       short newColon = oldColon + colVeSecond;
       short oldRowSec = control[1];
       short newRowSec = oldRowSec + rowVeSecond;
 
-      // Screen boundary checks
+      // Check screen boundaries
       if (newColon <= colera[0] || newColon >= colera[1])
         colVeSecond = -colVeSecond;
       else
@@ -201,23 +201,11 @@ void wdt_c_handler()
         control[1] = newRowSec;
     }
 
-    { /* Update color (optional) */
-      if (switches & SW3) green = (green + 1) % 64;
-      if (switches & SW2) blue = (blue + 2) % 32;
-      if (switches & SW1){
-        if (colorFromWheel >= *(&colorWheel + 1) - colorWheel) colorFromWheel = 0;
-        colorFromWheel++;
-      }
-      if (step <= 30)
-        step ++;
-      else
-        step = 0;
-      secCount = 0;
-    }
-    if (switches & SW4) return;
     redrawScreen = 1;
+    secCount = 0;
   }
 }
+
 
 void update_shape();
 
