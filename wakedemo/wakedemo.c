@@ -71,7 +71,7 @@ short colera[2] = {1, SCREEN_WIDTH-20};
 int sizeOfBall = 10;
 int sizeOfBallSec = 10;
 
-void draw_ball(int col, int row, unsigned short color)
+void draw_ball(int col, int row, unsigned short color, int sizeOfBall);
 {
   fillRectangle(col-1, row-1, sizeOfBall, sizeOfBall, color);
 }
@@ -84,11 +84,11 @@ void screen_update_ball()
   return;			/* nothing to do */
  redraw:
   sizeOfBall++;
-  draw_ball(drawPos[0], drawPos[1], COLOR_BLUE); /* erase */
+  draw_ball(drawPos[0], drawPos[1], COLOR_BLUE, sizeOfBall); /* erase */
   sizeOfBall--;
   for (char axis = 0; axis < 2; axis ++)
     drawPos[axis] = controlPos[axis];
-  draw_ball(drawPos[0], drawPos[1], COLOR_WHITE); /* draw */
+  draw_ball(drawPos[0], drawPos[1], COLOR_WHITE, sizeOfBall); /* draw */
 }
 
 void screen_update_second_ball(){
@@ -96,12 +96,12 @@ void screen_update_second_ball(){
 
   // Increment size only if position changed
   sizeOfBall += position_changed;
-  draw_ball(drawPosSec[0], drawPosSec[1], position_changed ? COLOR_BLUE : colorWheel[colorFromWheel]);
+  draw_ball(drawPosSec[0], drawPosSec[1], position_changed ? COLOR_BLUE : colorWheel[colorFromWheel], sizeOfBall);
 
   drawPosSec[0] = control[0];
   drawPosSec[1] = control[1];
 
-  draw_ball(drawPosSec[0], drawPosSec[1], colorWheel[colorFromWheel]);
+  draw_ball(drawPosSec[0], drawPosSec[1], colorWheel[colorFromWheel], sizeOfBall);
 
   sizeOfBall -= position_changed;
 }
