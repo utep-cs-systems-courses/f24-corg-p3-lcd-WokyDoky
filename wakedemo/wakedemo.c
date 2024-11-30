@@ -1,4 +1,4 @@
-//Old and working Debug text
+//New debug text
 
 #include <msp430.h>
 #include <libTimer.h>
@@ -85,6 +85,7 @@ void screen_update_ball()
   draw_ball(drawPos[0], drawPos[1], COLOR_WHITE); /* draw */
 }
 
+int COLOR_OF_BALL = COLOR_WHITE;
 void screen_update_second_ball(){
   for (char axis = 0; axis < 2; axis ++){
     if (drawPosSec[axis] != control[axis]){
@@ -94,7 +95,7 @@ void screen_update_second_ball(){
 	for(char sixa = 0; sixa < 2; sixa++){
 	  drawPosSec[sixa] = control[sixa];
 	}
-	draw_ball(drawPosSec[0], drawPosSec[1], COLOR_WHITE);
+	draw_ball(drawPosSec[0], drawPosSec[1], COLOR_OF_BALL);
     }
   }
   return;
@@ -166,7 +167,12 @@ void wdt_c_handler()
     { /* Update color (optional) */
       if (switches & SW3) green = (green + 1) % 64;
       if (switches & SW2) blue = (blue + 2) % 32;
-      if (switches & SW1) red = (red - 3) % 32;
+      if (switches & SW1){
+        if (COLOR_OF_BALL == COLOR_WHITE){
+          COLOR_OF_BALL = COLOR_BLUE;
+          } else {
+            COLOR_OF_BALL = COLOR_WHITE;
+          }
       if (step <= 30)
         step ++;
       else
