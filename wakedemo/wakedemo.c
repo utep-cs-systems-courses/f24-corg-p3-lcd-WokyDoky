@@ -16,6 +16,7 @@
 
 #define SWITCHES 15
 
+int COLOR_OF_BALL = COLOR_WHITE;
 char blue = 31, green = 0, red = 31;
 unsigned char step = 0;
 
@@ -94,7 +95,7 @@ void screen_update_second_ball(){
 	for(char sixa = 0; sixa < 2; sixa++){
 	  drawPosSec[sixa] = control[sixa];
 	}
-	draw_ball(drawPosSec[0], drawPosSec[1], COLOR_WHITE);
+	draw_ball(drawPosSec[0], drawPosSec[1], COLOR_OF_BALL);
     }
   }
   return;
