@@ -174,7 +174,7 @@ void wdt_c_handler()
       if (switches & SW3) green = (green + 1) % 64;
       if (switches & SW2) blue = (blue + 2) % 32;
       if (switches & SW1){
-        if (colorFromWheel >= *(&colorWheel + 1) - Arr) colorFromWheel = 0;
+        if (colorFromWheel >= *(&colorWheel + 1) - colorWheel) colorFromWheel = 0;
         colorFromWheel++;
       }
       if (step <= 30)
