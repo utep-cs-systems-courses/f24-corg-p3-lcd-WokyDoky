@@ -184,7 +184,7 @@ void wdt_c_handler()
   }
 }
 
-void update_shape();
+static void update_shape();
 
 void main()
 {
@@ -209,7 +209,7 @@ void main()
   }
 }
 
-void
+static void
 update_shape()
 {
   screen_update_ball();
