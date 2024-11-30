@@ -245,7 +245,9 @@ void main()
   or_sr(0x8);	              /**< GIE (enable interrupts) */
 
   clearScreen(COLOR_BLUE);
-  drawString5x7(20,20, "hello", COLOR_GREEN, COLOR_RED);
+  //SCREEN_HEIGHT
+  drawString5x7(20, 20, "9", COLOR_YELLOW, COLOR_BLUE);
+  drawString5x7(40, 40, "9", COLOR_YELLOW, COLOR_BLUE);
   while (1) {			/* forever */
     if (redrawScreen) {
       redrawScreen = 0;
