@@ -71,7 +71,7 @@ short colera[2] = {1, SCREEN_WIDTH-20};
 int sizeOfBall = 10;
 int sizeOfBallSec = 10;
 
-void draw_ball(int col, int row, unsigned short color, int sizeOfBall);
+void draw_ball(int col, int row, unsigned short color, int sizeOfBall)
 {
   fillRectangle(col-1, row-1, sizeOfBall, sizeOfBall, color);
 }
