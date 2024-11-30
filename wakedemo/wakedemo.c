@@ -70,6 +70,7 @@ short colera[2] = {1, SCREEN_WIDTH-20};
 
 int sizeOfBall = 10;
 int sizeOfBallSec = 10;
+int sizeOfPaddel = 20;
 
 void draw_ball(int col, int row, unsigned short color, int sizeOfBall)
 {
@@ -86,7 +87,6 @@ void screen_update_ball()
   drawPos[1] = controlPos[1];
   draw_ball(drawPos[0], drawPos[1], COLOR_WHITE, sizeOfBall);
 }
-
 void screen_update_second_ball(){
   char position_changed = (drawPosSec[0] != control[0]) | (drawPosSec[1] != control[1]);
 
@@ -100,6 +100,13 @@ void screen_update_second_ball(){
   draw_ball(drawPosSec[0], drawPosSec[1], colorWheel[colorFromWheel], sizeOfBallSec);
 
   sizeOfBallSec -= position_changed;
+}
+
+void paddel (int height){
+  fillRectangle(height, SCREEN_HEIGHT / 2, sizeOfPaddel, sizeOfPaddel / 2, color);
+}
+void screen_update_paddel(){
+    paddel(40);
 }
 
 short redrawScreen = 1;
@@ -210,11 +217,10 @@ void main()
   }
 }
 
-void
-update_shape()
-{
+void update_shape() {
   screen_update_ball();
   screen_update_second_ball();
+  screen_update_paddel();
 }
 
 void
