@@ -117,17 +117,22 @@ void draw_paddle(int x, int y, unsigned short color) {
 
 // Function to update paddle position
 void update_paddle_position() {
-  // Move paddle based on button presses
-  if (switches & SW1) {  // Move right
-    if (paddleX + PADDLE_WIDTH < SCREEN_WIDTH) {
-      paddleX += PADDLE_SPEED;
-    }
-  }
-  if (switches & SW2) {  // Move left
-    if (paddleX > 0) {
+  draw_paddle(paddleX, paddleY, COLOR_BLUE);
+
+  // Update paddle position based on switches
+  if (switches & SW1) { // Move left
+    if (paddleX > 0) { // Ensure paddle doesn't go off-screen
       paddleX -= PADDLE_SPEED;
     }
   }
+  if (switches & SW2) { // Move right
+    if (paddleX < SCREEN_WIDTH - PADDLE_WIDTH) { // Ensure paddle doesn't go off-screen
+      paddleX += PADDLE_SPEED;
+    }
+  }
+
+  // Redraw the paddle in the new position
+  draw_paddle(paddleX, paddleY, COLOR_WHITE);
 }
 
 
