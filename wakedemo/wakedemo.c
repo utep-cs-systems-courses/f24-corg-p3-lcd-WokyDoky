@@ -89,24 +89,17 @@ void screen_update_ball()
 
 //NEW STUFF BE CAREFUL
 void screen_update_second_ball(){
-  char position_changed = (drawPosSec[0] != control[0]) |
-                            (drawPosSec[1] != control[1]);
+  char position_changed = (drawPosSec[0] != control[0]) | (drawPosSec[1] != control[1]);
 
   // Increment size only if position changed
   sizeOfBall += position_changed;
+  draw_ball(drawPosSec[0], drawPosSec[1], position_changed ? COLOR_BLUE : COLOR_OF_BALL);
 
-  // Draw first ball if position changed
-  draw_ball(drawPosSec[0], drawPosSec[1],
-            position_changed ? COLOR_BLUE : COLOR_OF_BALL);
-
-  // Update positions unconditionally
   drawPosSec[0] = control[0];
   drawPosSec[1] = control[1];
 
-  // Draw final ball
   draw_ball(drawPosSec[0], drawPosSec[1], COLOR_OF_BALL);
 
-  // Decrement size if it was incremented
   sizeOfBall -= position_changed;
 }
 
@@ -178,6 +171,9 @@ void wdt_c_handler()
       if (switches & SW2) blue = (blue + 2) % 32;
       if (switches & SW1){
         COLOR_OF_BALL = COLOR_YELLOW;
+      }
+      else{
+        COLOR_OF_BALL = COLOR_WHITE;
       }
       if (step <= 30)
         step ++;
