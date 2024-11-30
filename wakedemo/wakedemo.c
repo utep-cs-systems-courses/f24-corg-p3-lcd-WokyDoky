@@ -102,11 +102,23 @@ void screen_update_second_ball(){
   sizeOfBallSec -= position_changed;
 }
 
-void paddel (int height){
-  fillRectangle(height, SCREEN_HEIGHT / 2, sizeOfPaddel, sizeOfPaddel / 2, COLOR_WHITE);
+short padelPos[2] = {1,10}, controlPadelPos[2] = {2, 10};
+short padelVelocity = 1;
+
+
+void padel (int col, int row, unsigned short color){
+  fillRectangle(col-1, row-1, sizeOfPaddel, sizeOfPaddel / 2, color);
 }
-void screen_update_paddel(){
-    paddel(40);
+void screen_update_padel(){
+  for (char axis = 0; axis < 2; axis ++)
+    if (padelPos[axis] != controlPadelPos[axis]) /* position changed? */
+      goto redraw;
+  return;			/* nothing to do */
+  redraw:
+   padel(padelPos[0], padelPos[1], COLOR_BLUE); /* erase */
+  for (char axis = 0; axis < 2; axis ++)
+    padelPos[axis] = controlPadelPos[axis];
+  padel(padelPos[0], padelPos[1], COLOR_WHITE); /* draw */
 }
 
 short redrawScreen = 1;
@@ -220,7 +232,7 @@ void main()
 void update_shape() {
   screen_update_ball();
   screen_update_second_ball();
-  screen_update_paddel();
+  screen_update_padel();
 }
 
 void
