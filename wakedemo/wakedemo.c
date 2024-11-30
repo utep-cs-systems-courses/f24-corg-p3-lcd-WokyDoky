@@ -95,15 +95,15 @@ void screen_update_second_ball(){
   char position_changed = (drawPosSec[0] != control[0]) | (drawPosSec[1] != control[1]);
 
   // Increment size only if position changed
-  sizeOfBall += position_changed;
-  draw_ball(drawPosSec[0], drawPosSec[1], position_changed ? COLOR_BLUE : colorWheel[colorFromWheel], sizeOfBall);
+  sizeOfBallSec += position_changed;
+  draw_ball(drawPosSec[0], drawPosSec[1], position_changed ? COLOR_BLUE : colorWheel[colorFromWheel], sizeOfBallSec);
 
   drawPosSec[0] = control[0];
   drawPosSec[1] = control[1];
 
-  draw_ball(drawPosSec[0], drawPosSec[1], colorWheel[colorFromWheel], sizeOfBall);
+  draw_ball(drawPosSec[0], drawPosSec[1], colorWheel[colorFromWheel], sizeOfBallSec);
 
-  sizeOfBall -= position_changed;
+  sizeOfBallSec -= position_changed;
 }
 
 short redrawScreen = 1;
@@ -129,7 +129,7 @@ void wdt_c_handler()
       // Check collision between balls
       int ballDistance = ((newCol - control[0]) * (newCol - control[0])) +
                          ((newRow - control[1]) * (newRow - control[1]));
-      int collisionThreshold = (sizeOfBall * 2) * (sizeOfBall * 2);
+      int collisionThreshold = (sizeOfBall * 2) * (sizeOfBallSec * 2);
 
       if (ballDistance <= collisionThreshold) {
         // Swap velocities on collision
@@ -139,6 +139,11 @@ void wdt_c_handler()
         rowVeSecond = -rowVeSecond;
         if (colorFromWheel >= *(&colorWheel + 1) - colorWheel) colorFromWheel = 0;
         colorFromWheel++;
+
+        sizeOfBallSec++;
+        if (sizeOfBallSec > 20) {
+          sizeOfBallSec = 10; // Reset size if it exceeds 20
+        }
       }
 
       // Screen boundary checks
