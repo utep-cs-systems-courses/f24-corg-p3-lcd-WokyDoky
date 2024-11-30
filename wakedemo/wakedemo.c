@@ -18,7 +18,7 @@
 
 
 //Added wheel
-int colorWheel [] = {COLOR_DARK_OLIVE_GREEN, COLOR_CYAN, COLOR_BLACK};
+int colorWheel [] = {COLOR_RED, COLOR_GREEN, COLOR_BLACK};
 int colorFromWheel = 0;
 int COLOR_OF_BALL = COLOR_WHITE;
 char blue = 31, green = 0, red = 31;
@@ -78,18 +78,12 @@ void draw_ball(int col, int row, unsigned short color, int sizeOfBall)
 
 void screen_update_ball()
 {
-  int position_changed = (drawPos[0] != controlPos[0]) | (drawPos[1] != controlPos[1]);
-
-  // Erase the old ball if position changed
+  char position_changed = (drawPos[0] != controlPos[0]) | (drawPos[1] != controlPos[1]);
   sizeOfBall += position_changed;
   draw_ball(drawPos[0], drawPos[1], position_changed ? COLOR_BLUE : COLOR_WHITE, sizeOfBall);
   sizeOfBall -= position_changed;
-
-  // Update drawPos to match controlPos (always happens)
   drawPos[0] = controlPos[0];
   drawPos[1] = controlPos[1];
-
-  // Draw the new ball
   draw_ball(drawPos[0], drawPos[1], COLOR_WHITE, sizeOfBall);
 }
 
@@ -97,7 +91,7 @@ void screen_update_second_ball(){
   char position_changed = (drawPosSec[0] != control[0]) | (drawPosSec[1] != control[1]);
 
   // Increment size only if position changed
-  sizeOfBallSec += position_changed;
+  sizeOfBallSec += position_changed * 2;
   draw_ball(drawPosSec[0], drawPosSec[1], position_changed ? COLOR_BLUE : colorWheel[colorFromWheel], sizeOfBallSec);
 
   drawPosSec[0] = control[0];
@@ -105,7 +99,7 @@ void screen_update_second_ball(){
 
   draw_ball(drawPosSec[0], drawPosSec[1], colorWheel[colorFromWheel], sizeOfBallSec);
 
-  sizeOfBallSec -= position_changed;
+  sizeOfBallSec -= position_changed * 2;
 }
 
 short redrawScreen = 1;
@@ -142,7 +136,8 @@ void wdt_c_handler()
         if (colorFromWheel >= *(&colorWheel + 1) - colorWheel) colorFromWheel = 0;
         colorFromWheel++;
 
-        sizeOfBallSec = (sizeOfBallSec <= 20) * sizeOfBallSec + (sizeOfBallSec > 20) * 10;
+        if (sizeOfSecondBall > 40) sizeOfSecondBall = 10;
+        sizeOfSecondBall += 2;
 
 
       }
