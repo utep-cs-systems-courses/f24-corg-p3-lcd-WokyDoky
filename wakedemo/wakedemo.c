@@ -69,6 +69,7 @@ short colVeSecond = -3;
 short colera[2] = {1, SCREEN_WIDTH-20};
 
 int sizeOfBall = 10;
+int sizeOfBallSec = 10;
 
 void draw_ball(int col, int row, unsigned short color)
 {
@@ -90,8 +91,6 @@ void screen_update_ball()
   draw_ball(drawPos[0], drawPos[1], COLOR_WHITE); /* draw */
 }
 
-
-//NEW STUFF BE CAREFUL
 void screen_update_second_ball(){
   char position_changed = (drawPosSec[0] != control[0]) | (drawPosSec[1] != control[1]);
 
@@ -138,6 +137,8 @@ void wdt_c_handler()
         rowVelocity = -rowVelocity;
         colVeSecond = -colVeSecond;
         rowVeSecond = -rowVeSecond;
+        if (colorFromWheel >= *(&colorWheel + 1) - colorWheel) colorFromWheel = 0;
+        colorFromWheel++;
       }
 
       // Screen boundary checks
