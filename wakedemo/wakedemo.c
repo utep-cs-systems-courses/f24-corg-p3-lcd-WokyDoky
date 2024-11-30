@@ -117,7 +117,7 @@ void wdt_c_handler()
   secCount ++;
   if (secCount >= 12) { /* 10/sec */
 
-      /* Move first ball */
+    { /* Move first ball */
       short oldCol = controlPos[0];
       short newCol = oldCol + colVelocity;
       short oldRow = controlPos[1];
@@ -166,12 +166,19 @@ void wdt_c_handler()
         control[1] = newRowSec;
     }
 
-    if (switches & SW1){
-      if (COLOR_OF_BALL == COLOR_WHITE){
-        COLOR_OF_BALL = COLOR_YELLOW;
-        } else {
-          COLOR_OF_BALL = COLOR_WHITE;
-        }
+    { /* Update color (optional) */
+      if (switches & SW1){
+        if (COLOR_OF_BALL == COLOR_WHITE){
+          COLOR_OF_BALL = COLOR_BLUE;
+          } else {
+            COLOR_OF_BALL = COLOR_WHITE;
+          }
+      if (step <= 30)
+        step ++;
+      else
+        step = 0;
+      secCount = 0;
+    }
     if (switches & SW4) return;
     redrawScreen = 1;
   }
