@@ -154,24 +154,40 @@ int is_ball_colliding_with_paddle(short ballX, short ballY, int ballSize) {
           ballX <= paddleX + PADDLE_WIDTH);   // Ball is at or before paddle's right edge
 }
 
-void wdt_c_handler() {
+void wdt_c_handler()
+{
   static int secCount = 0;
 
-  secCount++;
+  secCount ++;
   if (secCount >= 12) {
-    { /* Move the first ball */
+
+    { /* Move first ball */
       short oldCol = controlPos[0];
       short newCol = oldCol + colVelocity;
       short oldRow = controlPos[1];
       short newRow = oldRow + rowVelocity;
 
-      // Check collision with paddle
+      // Check collision between balls
+      int ballDistance = ((newCol - control[0]) * (newCol - control[0])) +
+                         ((newRow - control[1]) * (newRow - control[1]));
+      int collisionThreshold = (sizeOfBall * 2) * (sizeOfBallSec * 2);
+
+      if (ballDistance <= collisionThreshold) {
+        // Swap velocities on collision
+        colVelocity = -colVelocity;
+        rowVelocity = -rowVelocity;
+        colVeSecond = -colVeSecond;
+        rowVeSecond = -rowVeSecond;
+        if (colorFromWheel >= *(&colorWheel + 1) - colorWheel) colorFromWheel = 0;
+        colorFromWheel++;
+      }
       if (is_ball_colliding_with_paddle(newCol, newRow, sizeOfBall)) {
-        rowVelocity = -rowVelocity; // Reverse vertical direction
+        colVelocity = -colVelocity;
+        rowVelocity = -rowVelocity;
         newRow = paddleY - sizeOfBall; // Adjust position to avoid overlapping
       }
 
-      // Check screen boundaries
+      // Screen boundary checks
       if (newCol <= colLimits[0] || newCol >= colLimits[1])
         colVelocity = -colVelocity;
       else
@@ -183,13 +199,13 @@ void wdt_c_handler() {
         controlPos[1] = newRow;
     }
 
-    { /* Move the second ball (if applicable) */
+    { /* Move second ball */
       short oldColon = control[0];
       short newColon = oldColon + colVeSecond;
       short oldRowSec = control[1];
       short newRowSec = oldRowSec + rowVeSecond;
 
-      // Check screen boundaries
+      // Screen boundary checks
       if (newColon <= colera[0] || newColon >= colera[1])
         colVeSecond = -colVeSecond;
       else
@@ -201,11 +217,17 @@ void wdt_c_handler() {
         control[1] = newRowSec;
     }
 
+    {
+      if (step <= 30)
+        step ++;
+      else
+        step = 0;
+      secCount = 0;
+    }
+    if (switches & SW4) return;
     redrawScreen = 1;
-    secCount = 0;
   }
 }
-
 
 void update_shape();
 
