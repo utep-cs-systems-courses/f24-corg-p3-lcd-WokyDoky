@@ -136,8 +136,8 @@ void wdt_c_handler()
         if (colorFromWheel >= *(&colorWheel + 1) - colorWheel) colorFromWheel = 0;
         colorFromWheel++;
 
-        if (sizeOfSecondBall > 40) sizeOfSecondBall = 10;
-        sizeOfSecondBall += 2;
+        if (sizeOfBallSec > 40) sizeOfBallSec = 10;
+        sizeOfBallSec += 2;
 
 
       }
