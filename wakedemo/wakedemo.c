@@ -103,7 +103,7 @@ void screen_update_second_ball(){
 }
 
 void paddel (int height){
-  fillRectangle(height, SCREEN_HEIGHT / 2, sizeOfPaddel, sizeOfPaddel / 2, color);
+  fillRectangle(height, SCREEN_HEIGHT / 2, sizeOfPaddel, sizeOfPaddel / 2, COLOR_WHITE);
 }
 void screen_update_paddel(){
     paddel(40);
