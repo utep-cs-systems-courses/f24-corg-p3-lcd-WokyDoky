@@ -203,6 +203,9 @@ void wdt_c_handler()
       short newColon = oldColon + colVeSecond;
       short oldRowSec = control[1];
       short newRowSec = oldRowSec + rowVeSecond;
+      if (is_ball_colliding_with_paddle(newColon, newRowSec, sizeOfBallSec)) {
+        rowVeSecond = -rowVeSecond;
+      }
 
       // Screen boundary checks
       if (newColon <= colera[0] || newColon >= colera[1])
@@ -214,10 +217,6 @@ void wdt_c_handler()
         rowVeSecond = -rowVeSecond;
       else
         control[1] = newRowSec;
-    }
-    if (is_ball_colliding_with_paddle(newColon, newRowSec, sizeOfBallSec)) {
-
-      rowVeSecond = -rowVeSecond;
     }
 
     {
