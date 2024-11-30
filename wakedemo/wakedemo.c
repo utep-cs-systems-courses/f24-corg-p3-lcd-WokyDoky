@@ -20,7 +20,7 @@
 //Added wheel
 int colorWheel [] = {COLOR_WHITE, COLOR_CYAN, COLOR_MAGENTA, COLOR_HOT_PINK, COLOR_PINK};
 int colorFromWheel = 0;
-int COLOR_OF_BALL = colorWheel[colorWheel];
+int COLOR_OF_BALL = colorWheel[colorFromWheel];
 char blue = 31, green = 0, red = 31;
 unsigned char step = 0;
 
