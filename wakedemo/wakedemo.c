@@ -117,7 +117,7 @@ void wdt_c_handler()
   secCount ++;
   if (secCount >= 12) { /* 10/sec */
 
-    { /* Move first ball */
+      /* Move first ball */
       short oldCol = controlPos[0];
       short newCol = oldCol + colVelocity;
       short oldRow = controlPos[1];
