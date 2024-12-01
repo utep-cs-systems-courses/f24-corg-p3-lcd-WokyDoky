@@ -161,6 +161,8 @@ void wdt_c_handler(){
   secCount ++;
   if (secCount >= 12) {
     drawChar5x7(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, lost, COLOR_YELLOW, COLOR_BLUE);
+    if (lost > 3 ) lost = 48;
+    lost++;
 
     { /* Move first ball */
       short oldCol = controlPos[0];
@@ -188,18 +190,13 @@ void wdt_c_handler(){
       }
 
       // Screen boundary checks
-      if (newCol <= colLimits[0] || newCol >= colLimits[1]){
+      if (newCol <= colLimits[0] || newCol >= colLimits[1])
         colVelocity = -colVelocity;
-      }
       else
         controlPos[0] = newCol;
 
-      if (newRow <= rowLimits[0] || newRow >= rowLimits[1]){
+      if (newRow <= rowLimits[0] || newRow >= rowLimits[1])
         rowVelocity = -rowVelocity;
-        if (lost > 3 ) lost = 48;
-        lost++;
-      }
-
       else
         controlPos[1] = newRow;
     }
