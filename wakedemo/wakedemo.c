@@ -209,6 +209,7 @@ void wdt_c_handler(){
         rowVelocity = -rowVelocity;
         lives--;
         if (lives == 48) lives = 51;
+        drawPos = {1,10};
       }
 
       else
