@@ -35,7 +35,8 @@ int COLOR_OF_BALL = COLOR_WHITE;
 char blue = 31, green = 0, red = 31;
 unsigned char step = 0;
 
-char lost = 30;
+char lost = 48;
+char test = "0";
 
 static char 
 switch_update_interrupt_sense()
@@ -160,6 +161,8 @@ void wdt_c_handler(){
 
   secCount ++;
   if (secCount >= 12) {
+    drawChar5x7(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, lost, COLOR_YELLOW, COLOR_BLUE);
+    drawChar5x7(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 50, test, COLOR_YELLOW, COLOR_BLUE);
 
     { /* Move first ball */
       short oldCol = controlPos[0];
@@ -247,7 +250,7 @@ void main()
   clearScreen(COLOR_BLUE);
   //SCREEN_HEIGHT
   //SCREEN_WIDTH
-  drawChar5x7(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, lost, COLOR_YELLOW, COLOR_BLUE);
+
   while (1) {			/* forever */
     if (redrawScreen) {
       redrawScreen = 0;
