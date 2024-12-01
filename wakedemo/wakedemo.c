@@ -166,6 +166,7 @@ int is_ball_colliding_with_second_paddle(short ballX, short ballY, int ballSize)
 }
 
 char sound_level = 0;
+void buzzer_set_period(short cycles);
 
 void wdt_c_handler(){
   static int secCount = 0;
