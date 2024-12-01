@@ -27,6 +27,8 @@
 // Global variables for paddle
 short paddleX = (SCREEN_WIDTH - PADDLE_WIDTH) / 2;  // Start at center
 short paddleY = 10;  // Paddle positioned near the top of the screen
+short paddleX2 = (SCREEN_WIDTH - PADDLE_WIDTH) / 2;  // Start at center
+short paddleY2 = SCREEN_HEIGHT - 30;
 
 //Added wheel
 int colorWheel [] = {COLOR_RED, COLOR_GREEN, COLOR_BLACK};
@@ -150,8 +152,15 @@ short rowera[2] = {1, SCREEN_HEIGHT-20};
 
 int is_ball_colliding_with_paddle(short ballX, short ballY, int ballSize) {
   // Check if the ball intersects the paddle's rectangle
-  return (ballY + ballSize >= paddleY &&       // Ball is at or below paddle's top edge
-          ballY <= paddleY + PADDLE_HEIGHT);   // Ball is at or before paddle's right edge
+  if (is_ball_colliding_with_paddle(ballX, ballY, ballSize)) {
+    return 1;
+  }
+
+  // Check collision with second paddle
+  return (ballY + ballSize >= paddleY2 &&       // Ball is at or below paddle2's top edge
+          ballY <= paddleY2 + PADDLE_HEIGHT && // Ball is above paddle2's bottom edge
+          ballX + ballSize >= paddleX2 &&      // Ball is at or beyond paddle2's left edge
+          ballX <= paddleX2 + PADDLE_WIDTH);   // Ball is at or before paddle2's right edge
 }
 
 void wdt_c_handler(){
