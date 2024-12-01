@@ -150,10 +150,7 @@ short rowera[2] = {1, SCREEN_HEIGHT-20};
 
 int is_ball_colliding_with_paddle(short ballX, short ballY, int ballSize) {
   // Check if the ball intersects the paddle's rectangle
-  return (ballY + ballSize >= paddleY &&       // Ball is at or below paddle's top edge
-          ballY <= paddleY + PADDLE_HEIGHT && // Ball is above paddle's bottom edge
-          ballX + ballSize >= paddleX &&      // Ball is at or beyond paddle's left edge
-          ballX <= paddleX + PADDLE_WIDTH);   // Ball is at or before paddle's right edge
+  return (ballY + ballSize >= paddleY);   // Ball is at or before paddle's right edge
 }
 
 void wdt_c_handler(){
