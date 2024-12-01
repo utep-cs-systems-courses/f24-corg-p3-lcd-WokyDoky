@@ -36,7 +36,7 @@ char blue = 31, green = 0, red = 31;
 unsigned char step = 0;
 
 char lost = 48;
-char test = "0";
+char test = '0';
 
 static char 
 switch_update_interrupt_sense()
