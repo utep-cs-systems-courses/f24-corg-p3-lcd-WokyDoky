@@ -142,7 +142,7 @@ void update_paddle_position() {
 short redrawScreen = 1;
 u_int controlFontColor = COLOR_GREEN;
 
-short rowVelocity = 4, rowLimits[2] = {1, SCREEN_HEIGHT-20};
+short rowVelocity = 3, rowLimits[2] = {1, SCREEN_HEIGHT-20};
 short rowVeSecond = -3;
 short rowera[2] = {1, SCREEN_HEIGHT-20};
 
@@ -163,20 +163,7 @@ int is_ball_colliding_with_second_paddle(short ballX, short ballY, int ballSize)
           ballX + ballSize >= paddleX &&      // Ball is at or beyond paddle's left edge
           ballX <= paddleX + PADDLE_WIDTH);   // Ball is at or before paddle's right edge
 }
-int is_ball_inside_another(short ball1X, short ball1Y, int ball1Radius,
-                           short ball2X, short ball2Y, int ball2Radius) {
-  // Calculate the squared distance between the centers of the balls
-  int deltaX = ball1X - ball2X;
-  int deltaY = ball1Y - ball2Y;
-  int distanceSquared = deltaX * deltaX + deltaY * deltaY;
 
-  // Calculate the squared radius difference
-  int radiusDifference = ball2Radius - ball1Radius;
-  int radiusDifferenceSquared = radiusDifference * radiusDifference;
-
-  // Check if ball1 is inside ball2
-  return distanceSquared <= radiusDifferenceSquared;
-}
 void wdt_c_handler(){
   static int secCount = 0;
 
@@ -203,7 +190,7 @@ void wdt_c_handler(){
         if (colorFromWheel >= *(&colorWheel + 1) - colorWheel) colorFromWheel = 0;
         colorFromWheel++;
       }
-      if (is_ball_colliding_with_paddle(newCol, newCol, sizeOfBall)) {
+      if (is_ball_colliding_with_paddle(newCol, newRow, sizeOfBall)) {
 
         rowVelocity = -rowVelocity;
       }
@@ -243,7 +230,6 @@ void wdt_c_handler(){
         rowVeSecond = -rowVeSecond;
       }
 
-
       // Screen boundary checks
       if (newColon <= colera[0] || newColon >= colera[1])
         colVeSecond = -colVeSecond;
@@ -254,7 +240,7 @@ void wdt_c_handler(){
         rowVeSecond = -rowVeSecond;
         lives--;
         if (lives == 48) lives = 51;
-        control[0] = SCREEN_WIDTH / 2 + sizeOfBallSec + 15;
+        control[0] = SCREEN_WIDTH / 2 + sizeOfBallSec + 20;
         control[1] = SCREEN_HEIGHT / 2 + sizeOfBallSec;
       }
       else
