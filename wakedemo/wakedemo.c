@@ -242,7 +242,7 @@ void wdt_c_handler(){
 
         rowVeSecond = -rowVeSecond;
       }
-      if (is_ball_inside_another(newCol, newCol, newColon, newRowSec)){
+      if (is_ball_inside_another(oldCol + colVelocity, oldRow + rowVelocity, sizeOfBall, newColon, newRowSec, sizeOfBallSec)){
         control[0] = SCREEN_WIDTH / 2 + newColon + sizeOfBallSec;
         control[1] = SCREEN_HEIGHT / 2 + sizeOfBallSec;
       }
