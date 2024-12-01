@@ -114,7 +114,7 @@ void screen_update_second_ball(){
 
 void draw_paddle(int x, int y, unsigned short color) {
   fillRectangle(x, y, PADDLE_WIDTH, PADDLE_HEIGHT, color);
-  fillRectangle(x, y + SCREEN_HEIGHT - 40, PADDLE_WIDTH, PADDLE_HEIGHT, color);
+  fillRectangle(x, y + SCREEN_HEIGHT - 30, PADDLE_WIDTH, PADDLE_HEIGHT, color);
 }
 
 // Function to update paddle position
