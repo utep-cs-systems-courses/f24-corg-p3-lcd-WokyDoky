@@ -190,13 +190,18 @@ void wdt_c_handler(){
       }
 
       // Screen boundary checks
-      if (newCol <= colLimits[0] || newCol >= colLimits[1])
+      if (newCol <= colLimits[0] || newCol >= colLimits[1]){
         colVelocity = -colVelocity;
+        lost++;
+      }
       else
         controlPos[0] = newCol;
 
-      if (newRow <= rowLimits[0] || newRow >= rowLimits[1])
+      if (newRow <= rowLimits[0] || newRow >= rowLimits[1]){
         rowVelocity = -rowVelocity;
+        test++;
+      }
+
       else
         controlPos[1] = newRow;
     }
