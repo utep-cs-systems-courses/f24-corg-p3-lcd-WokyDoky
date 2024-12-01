@@ -31,6 +31,7 @@ short paddleY2 = SCREEN_HEIGHT - 20;
 
 //Added wheel
 int colorWheel [] = {COLOR_RED, COLOR_GREEN, COLOR_BLACK};
+int soundWheel [] = {200, 500, 800};
 int colorFromWheel = 0;
 int COLOR_OF_BALL = COLOR_WHITE;
 char blue = 31, green = 0, red = 31;
@@ -164,6 +165,8 @@ int is_ball_colliding_with_second_paddle(short ballX, short ballY, int ballSize)
           ballX <= paddleX + PADDLE_WIDTH);   // Ball is at or before paddle's right edge
 }
 
+char sound_level = 0;
+
 void wdt_c_handler(){
   static int secCount = 0;
 
@@ -254,18 +257,41 @@ void wdt_c_handler(){
         step = 0;
       secCount = 0;
     }
+    if (switches & SW3){
+      soundLevel++;
+      if (soundLevel >= *(&soundWheel + 1) - soundWheel) soundLevel = 0;
+      buzzer_set_period(soundWheel[soundLevel]);
+    }
     if (switches & SW4){
-      controlPos[0] = 2;
-      controlPos[1] = 10;
+      buzzer_set_period(0);
+      controlPos[0] = SCREEN_WIDTH / 2;
+      controlPos[1] = SCREEN_HEIGHT / 2;
 
-      control[0] = 21;
-      control[1] = 100;
+      control[0] = 10;
+      control[1] = SCREEN_HEIGHT / 2 + sizeOfBallSec;
     }
     redrawScreen = 1;
   }
 }
 
 void update_shape();
+
+
+//Things to make sound
+void buzzer_init() {
+  P2SEL2 &= ~(BIT6 | BIT7);    // Clear P2SEL2 bits 6 and 7
+  P2SEL &= ~BIT7;              // Clear P2SEL.7
+  P2SEL |= BIT6;               // Set P2SEL.6 for Timer A output
+  P2DIR |= BIT6;               // Set P2.6 direction to output
+
+  TA0CTL = TASSEL_2 + MC_1;    // Use SMCLK, up mode
+  TA0CCR0 = 1000;              // Set period
+  TA0CCTL1 = OUTMOD_7;         // Set to reset/set output mode
+}
+void buzzer_set_period(short cycles) {
+  TA0CCR0 = cycles;            // Set the period of the buzzer tone
+  TA0CCR1 = cycles >> 1;       // Set duty cycle to 50%
+}
 
 void main()
 {
@@ -274,6 +300,7 @@ void main()
   configureClocks();
   lcd_init();
   switch_init();
+  buzzer_init();
 
   enableWDTInterrupts();      /**< enable periodic interrupt */
   or_sr(0x8);	              /**< GIE (enable interrupts) */
