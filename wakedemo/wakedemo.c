@@ -77,7 +77,7 @@ short colVelocity = 3, colLimits[2] = {1, SCREEN_WIDTH-20};
 short drawPosSec[2] = {20,100};
 short control[2] = {21,100};
 
-short colVeSecond = -6;
+short colVeSecond = -1;
 short colera[2] = {1, SCREEN_WIDTH-20};
 
 int sizeOfBall = 10;
