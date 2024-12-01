@@ -142,8 +142,8 @@ void update_paddle_position() {
 short redrawScreen = 1;
 u_int controlFontColor = COLOR_GREEN;
 
-short rowVelocity = 3, rowLimits[2] = {1, SCREEN_HEIGHT-20};
-short rowVeSecond = -2;
+short rowVelocity = 4, rowLimits[2] = {1, SCREEN_HEIGHT-20};
+short rowVeSecond = -3;
 short rowera[2] = {1, SCREEN_HEIGHT-20};
 
 
@@ -242,10 +242,7 @@ void wdt_c_handler(){
 
         rowVeSecond = -rowVeSecond;
       }
-      if (is_ball_inside_another(controlPos[0] + colVelocity, controlPos[1] + rowVelocity, sizeOfBall, newColon, newRowSec, sizeOfBallSec)){
-        control[0] = SCREEN_WIDTH / 2 + newColon + sizeOfBallSec;
-        control[1] = SCREEN_HEIGHT / 2 + sizeOfBallSec;
-      }
+
 
       // Screen boundary checks
       if (newColon <= colera[0] || newColon >= colera[1])
