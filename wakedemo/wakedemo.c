@@ -27,7 +27,7 @@
 // Global variables for paddle
 short paddleX = (SCREEN_WIDTH - PADDLE_WIDTH) / 2;  // Start at center
 short paddleY = 10;  // Paddle positioned near the top of the screen
-short paddleY2 = SCREEN_HEIGHT - 30;
+short paddleY2 = SCREEN_HEIGHT - 20;
 
 //Added wheel
 int colorWheel [] = {COLOR_RED, COLOR_GREEN, COLOR_BLACK};
