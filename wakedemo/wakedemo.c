@@ -28,13 +28,14 @@
 short paddleX = (SCREEN_WIDTH - PADDLE_WIDTH) / 2;  // Start at center
 short paddleY = 10;  // Paddle positioned near the top of the screen
 
-
 //Added wheel
 int colorWheel [] = {COLOR_RED, COLOR_GREEN, COLOR_BLACK};
 int colorFromWheel = 0;
 int COLOR_OF_BALL = COLOR_WHITE;
 char blue = 31, green = 0, red = 31;
 unsigned char step = 0;
+
+char lost = 0;
 
 static char 
 switch_update_interrupt_sense()
@@ -154,8 +155,7 @@ int is_ball_colliding_with_paddle(short ballX, short ballY, int ballSize) {
           ballX <= paddleX + PADDLE_WIDTH);   // Ball is at or before paddle's right edge
 }
 
-void wdt_c_handler()
-{
+void wdt_c_handler(){
   static int secCount = 0;
 
   secCount ++;
@@ -247,7 +247,7 @@ void main()
   clearScreen(COLOR_BLUE);
   //SCREEN_HEIGHT
   //SCREEN_WIDTH
-  drawString5x7(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, "9", COLOR_YELLOW, COLOR_BLUE);
+  drawString5x7(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, lost, COLOR_YELLOW, COLOR_BLUE);
   while (1) {			/* forever */
     if (redrawScreen) {
       redrawScreen = 0;
