@@ -236,8 +236,13 @@ void wdt_c_handler(){
       else
         control[0] = newColon;
 
-      if (newRowSec <= rowera[0] || newRowSec >= rowera[1])
+      if (newRowSec <= rowera[0] || newRowSec >= rowera[1]){
         rowVeSecond = -rowVeSecond;
+        lives--;
+        if (lives == 48) lives = 51;
+        control[0] = SCREEN_WIDTH / 2 + sizeOfBallSec;
+        control[1] = SCREEN_HEIGHT / 2 + sizeOfBallSec;
+      }
       else
         control[1] = newRowSec;
     }
