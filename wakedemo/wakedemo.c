@@ -168,7 +168,7 @@ void wdt_c_handler(){
   static int secCount = 0;
 
   secCount ++;
-  if (secCount >= 18) {
+  if (secCount >= 15) {
 
     { /* Move first ball */
       short oldCol = controlPos[0];
@@ -209,7 +209,9 @@ void wdt_c_handler(){
         rowVelocity = -rowVelocity;
         lives--;
         if (lives == 48) lives = 51;
-        drawPos = {1,10};
+        drawPos[0] = 10;
+        //{1,10}
+        drawPos[1] = 20;
       }
 
       else
