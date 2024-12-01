@@ -36,7 +36,6 @@ char blue = 31, green = 0, red = 31;
 unsigned char step = 0;
 
 char lost = 48;
-char test = '0';
 
 static char 
 switch_update_interrupt_sense()
@@ -162,7 +161,6 @@ void wdt_c_handler(){
   secCount ++;
   if (secCount >= 12) {
     drawChar5x7(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, lost, COLOR_YELLOW, COLOR_BLUE);
-    drawChar5x7(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 50, test, COLOR_YELLOW, COLOR_BLUE);
 
     { /* Move first ball */
       short oldCol = controlPos[0];
@@ -192,14 +190,14 @@ void wdt_c_handler(){
       // Screen boundary checks
       if (newCol <= colLimits[0] || newCol >= colLimits[1]){
         colVelocity = -colVelocity;
-        lost++;
       }
       else
         controlPos[0] = newCol;
 
       if (newRow <= rowLimits[0] || newRow >= rowLimits[1]){
         rowVelocity = -rowVelocity;
-        test++;
+        if (lost > 3 ) lost = 48;
+        lost++;
       }
 
       else
