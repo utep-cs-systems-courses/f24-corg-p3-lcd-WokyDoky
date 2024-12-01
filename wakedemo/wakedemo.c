@@ -247,7 +247,7 @@ void main()
   clearScreen(COLOR_BLUE);
   //SCREEN_HEIGHT
   //SCREEN_WIDTH
-  drawString5x7(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, lost, COLOR_YELLOW, COLOR_BLUE);
+  drawChar5x7(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, lost, COLOR_YELLOW, COLOR_BLUE);
   while (1) {			/* forever */
     if (redrawScreen) {
       redrawScreen = 0;
