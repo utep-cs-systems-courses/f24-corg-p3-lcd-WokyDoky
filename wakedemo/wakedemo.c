@@ -251,7 +251,6 @@ void main()
   clearScreen(COLOR_BLUE);
   //SCREEN_HEIGHT
   //SCREEN_WIDTH
-  drawChar5x7(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, lives, COLOR_YELLOW, COLOR_BLUE);
   while (1) {			/* forever */
     if (redrawScreen) {
       redrawScreen = 0;
@@ -264,6 +263,7 @@ void main()
 }
 
 void update_shape() {
+  drawChar5x7(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, lives, COLOR_YELLOW, COLOR_BLUE);
   screen_update_ball();
   screen_update_second_ball();
   update_paddle_position();
