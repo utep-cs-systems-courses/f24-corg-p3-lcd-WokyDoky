@@ -209,9 +209,8 @@ void wdt_c_handler(){
         rowVelocity = -rowVelocity;
         lives--;
         if (lives == 48) lives = 51;
-        drawPos[0] = 10;
-        //{1,10}
-        drawPos[1] = 20;
+        controlPos[0] = SCREEN_WIDTH / 2;
+        controlPos[1] = SCREEN_HEIGHT / 2;
       }
 
       else
