@@ -259,9 +259,9 @@ void wdt_c_handler(){
       secCount = 0;
     }
     if (switches & SW3){
-      soundLevel++;
-      if (soundLevel >= *(&soundWheel + 1) - soundWheel) soundLevel = 0;
-      buzzer_set_period(soundWheel[soundLevel]);
+      sound_level++;
+      if (sound_level >= *(&soundWheel + 1) - soundWheel) sound_level = 0;
+      buzzer_set_period(soundWheel[sound_level]);
     }
     if (switches & SW4){
       buzzer_set_period(0);
