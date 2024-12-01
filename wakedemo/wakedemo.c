@@ -168,7 +168,7 @@ void wdt_c_handler(){
   static int secCount = 0;
 
   secCount ++;
-  if (secCount >= 25) {
+  if (secCount >= 18) {
 
     { /* Move first ball */
       short oldCol = controlPos[0];
