@@ -35,7 +35,7 @@ int COLOR_OF_BALL = COLOR_WHITE;
 char blue = 31, green = 0, red = 31;
 unsigned char step = 0;
 
-char lost = 0;
+char lost = 30;
 
 static char 
 switch_update_interrupt_sense()
