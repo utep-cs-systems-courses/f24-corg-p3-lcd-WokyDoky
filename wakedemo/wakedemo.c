@@ -156,6 +156,13 @@ int is_ball_colliding_with_paddle(short ballX, short ballY, int ballSize) {
           ballX + ballSize >= paddleX &&      // Ball is at or beyond paddle's left edge
           ballX <= paddleX + PADDLE_WIDTH);   // Ball is at or before paddle's right edge
 }
+int is_ball_colliding_with_second_paddle(short ballX, short ballY, int ballSize) {
+  // Check if the ball intersects the paddle's rectangle
+  return (ballY + ballSize >= paddleY2 &&       // Ball is at or below paddle's top edge
+          ballY <= paddleY2 + PADDLE_HEIGHT && // Ball is above paddle's bottom edge
+          ballX + ballSize >= paddleX &&      // Ball is at or beyond paddle's left edge
+          ballX <= paddleX + PADDLE_WIDTH);   // Ball is at or before paddle's right edge
+}
 
 void wdt_c_handler(){
   static int secCount = 0;
@@ -186,6 +193,10 @@ void wdt_c_handler(){
       if (is_ball_colliding_with_paddle(newCol, newRow, sizeOfBall)) {
 
         rowVelocity = -rowVelocity;
+      }
+      if (is_ball_colliding_with_second_paddle(newCol, newRow, sizeOfBall)) {
+
+        rowVelocity = +rowVelocity;
       }
 
       // Screen boundary checks
