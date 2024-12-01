@@ -223,6 +223,10 @@ void wdt_c_handler(){
       if (is_ball_colliding_with_paddle(newColon, newRowSec, sizeOfBallSec)) {
         rowVeSecond = -rowVeSecond;
       }
+      if (is_ball_colliding_with_second_paddle(newCol, newRow, sizeOfBall)) {
+
+        rowVeSecond = -rowVeSecond;
+      }
 
       // Screen boundary checks
       if (newColon <= colera[0] || newColon >= colera[1])
