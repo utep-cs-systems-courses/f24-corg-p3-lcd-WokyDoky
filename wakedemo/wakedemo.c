@@ -255,8 +255,11 @@ void wdt_c_handler(){
       secCount = 0;
     }
     if (switches & SW4){
-      controlPos[2] = {2, 10};
-      control[2] = {21,100};
+      controlPos[0] = 2;
+      controlPos[1] = 10;
+
+      control[0] = 21;
+      control[1] = 100;
     }
     redrawScreen = 1;
   }
