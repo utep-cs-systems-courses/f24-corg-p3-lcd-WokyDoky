@@ -196,7 +196,7 @@ void wdt_c_handler(){
       }
       if (is_ball_colliding_with_second_paddle(newCol, newRow, sizeOfBall)) {
 
-        rowVelocity = +rowVelocity;
+        rowVelocity = -rowVelocity;
       }
 
       // Screen boundary checks
