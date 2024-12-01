@@ -143,7 +143,7 @@ short redrawScreen = 1;
 u_int controlFontColor = COLOR_GREEN;
 
 short rowVelocity = 3, rowLimits[2] = {1, SCREEN_HEIGHT-20};
-short rowVeSecond = -3;
+short rowVeSecond = -2;
 short rowera[2] = {1, SCREEN_HEIGHT-20};
 
 
