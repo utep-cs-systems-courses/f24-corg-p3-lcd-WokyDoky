@@ -39,6 +39,11 @@ unsigned char step = 0;
 
 char lives = 51;
 
+//Test for assembly part:
+
+short doubleNumber(short number);
+
+
 static char 
 switch_update_interrupt_sense()
 {
@@ -321,6 +326,11 @@ void main()
 }
 
 void update_shape() {
+
+  //Test for assembly
+  short doubledLives = doubleNumber(lives);
+  drawChar5x7(SCREEN_WIDTH - 10, 10, doubledLives, COLOR_RED, COLOR_BLUE);
+
   drawChar5x7(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, lives, COLOR_YELLOW, COLOR_BLUE);
   screen_update_ball();
   screen_update_second_ball();
